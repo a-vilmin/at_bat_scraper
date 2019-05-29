@@ -10,5 +10,7 @@ Once you have all that, to run, execute `python atbat_scraper.py <database URI> 
 # HELPFUL LINKS
 
 [Table for referencing player ID's](http://crunchtimebaseball.com/baseball_map.html)
+
 [SQLAlchemy URI reference](https://docs.sqlalchemy.org/en/13/core/engines.html)
+
 [Root page for AtBat XML](https://gd2.mlb.com/components/game/mlb/)
