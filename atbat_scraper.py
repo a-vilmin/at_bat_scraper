@@ -7,14 +7,6 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
 import logging
 
-
-# init db stuff for SQLAlchemy
-
-engine = create_engine('sqlite:///pitch_fx.db')
-Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
-
 # init logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -73,6 +65,9 @@ def parse_inning(request, url, date):
             stand = at_bat.attrib['stand']
             for pitch in pitches:
                 pitch = pitch.attrib
+                for key, value in pitch.items():
+                    if value == "placeholder":
+                        pitch[key] = 0
                 try:
                     new_pitch = Pitch(pitcher=pitcher, hitter=hitter,
                                       date=date, stand=stand,
@@ -96,7 +91,6 @@ def parse_inning(request, url, date):
                 except KeyError:
                     logger.error("Key Missing For %s", url, exc_info=True)
                     continue
-
 
 def run_full_scrape():
     # creates full db from current date to 2008
@@ -160,11 +154,21 @@ if __name__ == '__main__':
     from sys import argv
 
     if len(argv) > 1:
-        if argv[1] == 'daily':
+        # init db stuff for SQLAlchemy 'sqlite:///pitch_fx.db'
+        try:
+            engine = create_engine(argv[1])
+            Base.metadata.bind = engine
+            DBSession = sessionmaker(bind=engine)
+            session = DBSession()
+        except:
+            logger.error("Error connecting to DB %s", argv[1])
+
+        if argv[2] == 'daily':
             run_previous_day()
-        elif argv[1] == 'full':
+        elif argv[2] == 'full':
             run_full_scrape()
         else:
-            logger.error("Invalid command line argument %s", argv[1])
+            logger.error("Invalid command line argument %s", argv[2])
     else:
-        print("Either daily or full required as argument!")
+        print("Missing arguments. Need both DB connection path and runtype " +
+              "(daily or full)")
