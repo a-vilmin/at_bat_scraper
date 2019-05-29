@@ -7,7 +7,7 @@ So first clone the repo and init a Python3 virtual env. Install the `requirement
 
 Once you have all that, to run, execute `python atbat_scraper.py <database URI> <("daily"|"full")>`. The scraper can either gather the previous day's games ("daily") or run from yesterday until the start of AtBat. Feel free to edit the times you want to scrape in the code, its pretty self explanitory.  
 
-#HELPFUL LINKS
+# HELPFUL LINKS
 
 [Table for referencing player ID's](http://crunchtimebaseball.com/baseball_map.html)
 [SQLAlchemy URI reference](https://docs.sqlalchemy.org/en/13/core/engines.html)
